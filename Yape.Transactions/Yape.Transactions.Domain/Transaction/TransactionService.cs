@@ -22,7 +22,9 @@ namespace Yape.Transactions.Domain.Transaction
         {
             _logger.LogInformation("Creating a new transaction with SourceAccountId: {SourceAccountId} and TargetAccountId: {TargetAccountId}", transaction.SourceAccountId, transaction.TargetAccountId);
 
-            
+            transaction.Id = Guid.NewGuid(); // Generate a new unique ID for the transaction
+            transaction.Status = TransactionStatus.Pending; // Set the initial status to Pending
+            transaction.CreatedAt = DateTime.UtcNow;
 
             // Save transaction with pending status
             await _transactionRepository.SaveAsync(transaction);

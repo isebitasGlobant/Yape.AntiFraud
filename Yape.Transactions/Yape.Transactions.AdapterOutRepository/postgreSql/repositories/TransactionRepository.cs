@@ -20,11 +20,7 @@ namespace Yape.AntiFraud.AdapterOutRepository.postgreSql.repositories
         }
 
         public async Task SaveAsync(Transaction transaction)
-        {
-            transaction.Id = Guid.NewGuid(); // Generate a new unique ID for the transaction
-            transaction.CreatedAt = DateTime.UtcNow;
-            transaction.Status = TransactionStatus.Pending; // Set the initial status to Pending
-
+        {   
             _context.Transactions.Add(transaction.ToEntity());
             await _context.SaveChangesAsync();
         }
