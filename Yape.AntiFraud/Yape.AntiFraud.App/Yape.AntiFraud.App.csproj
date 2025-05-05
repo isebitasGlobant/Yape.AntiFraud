@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>11f6899a-b898-41a9-89dd-1af1f7472fa0</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="docker\data\**" />
+    <Content Remove="docker\data\**" />
+    <EmbeddedResource Remove="docker\data\**" />
+    <None Remove="docker\data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Yape.AntiFraud.AdapterInHttp\Yape.AntiFraud.AdapterInHttp.csproj" />
+    <ProjectReference Include="..\Yape.AntiFraud.AdapterOutKafka\Yape.AntiFraud.AdapterOutKafka.csproj" />
+    <ProjectReference Include="..\Yape.AntiFraud.AdapterOutRepository\Yape.AntiFraud.AdapterOutRepository.csproj" />
+    <ProjectReference Include="..\Yape.AntiFraud.Domain\Yape.AntiFraud.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
