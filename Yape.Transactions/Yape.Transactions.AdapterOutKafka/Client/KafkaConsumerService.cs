@@ -1,9 +1,9 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
+using Polly;
+using Polly.Retry;
 using Serilog;
-using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 
 namespace Yape.Transactions.AdapterOutKafka.Client
 {
@@ -11,11 +11,22 @@ namespace Yape.Transactions.AdapterOutKafka.Client
     {
         private readonly ConsumerConfig _consumerConfig;
         private readonly HttpClient _httpClient;
+        private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
 
         public KafkaConsumerService(ConsumerConfig consumerConfig, HttpClient httpClient)
         {
             _consumerConfig = consumerConfig;
             _httpClient = httpClient;
+
+            // Define a retry policy with Polly
+            _retryPolicy = Policy
+                .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (result, timeSpan, retryCount, context) =>
+                    {
+                        Log.Warning("Retry {RetryCount} for HTTP request failed with status code {StatusCode}. Retrying in {TimeSpan} seconds.",
+                            retryCount, result.Result?.StatusCode, timeSpan.TotalSeconds);
+                    });
         }
 
         public void StartConsuming(string topic, string updateTransactionEndpoint)
@@ -32,9 +43,9 @@ namespace Yape.Transactions.AdapterOutKafka.Client
                     var consumeResult = consumer.Consume();
                     Log.Information("Message received: {Message}", consumeResult.Message.Value);
 
-                    // Send the message to the UpdateTransaction endpoint
+                    // Send the message to the UpdateTransaction endpoint with retry policy
                     var content = new StringContent(consumeResult.Message.Value, Encoding.UTF8, "application/json");
-                    var response = _httpClient.PostAsync(updateTransactionEndpoint, content).Result;
+                    var response = _retryPolicy.ExecuteAsync(() => _httpClient.PostAsync(updateTransactionEndpoint, content)).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -42,7 +53,7 @@ namespace Yape.Transactions.AdapterOutKafka.Client
                     }
                     else
                     {
-                        Log.Error("Error processing the message: {StatusCode}", response.StatusCode);
+                        Log.Error("Error processing the message after retries: {StatusCode}", response.StatusCode);
                     }
                 }
             }
@@ -76,8 +87,8 @@ namespace Yape.Transactions.AdapterOutKafka.Client
                 {
                     adminClient.CreateTopicsAsync(new[]
                     {
-                            new TopicSpecification { Name = topic, NumPartitions = 1, ReplicationFactor = 1 }
-                        }).Wait();
+                                new TopicSpecification { Name = topic, NumPartitions = 1, ReplicationFactor = 1 }
+                            }).Wait();
                     Log.Information("Topic '{Topic}' created.", topic);
                 }
             }

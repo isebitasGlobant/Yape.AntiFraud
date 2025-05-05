@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
+using Polly;
+using Polly.Retry;
 using Serilog;
 using System.Net.Http;
 using System.Text;
@@ -11,11 +13,22 @@ namespace Yape.AntiFraud.AdapterOutKafka
     {
         private readonly ConsumerConfig _consumerConfig;
         private readonly HttpClient _httpClient;
+        private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
 
         public KafkaConsumerService(ConsumerConfig consumerConfig, HttpClient httpClient)
         {
             _consumerConfig = consumerConfig;
             _httpClient = httpClient;
+
+            // Define a retry policy with Polly
+            _retryPolicy = Policy
+                .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (result, timeSpan, retryCount, context) =>
+                    {
+                        Log.Warning("Retry {RetryCount} for HTTP request. Waiting {TimeSpan} before next retry. Response: {Response}",
+                            retryCount, timeSpan, result.Result?.StatusCode);
+                    });
         }
 
         public void StartConsuming(string topic, string validateTransactionEndpoint)
@@ -33,7 +46,10 @@ namespace Yape.AntiFraud.AdapterOutKafka
                     Log.Information("Message received: {Message}", consumeResult.Message.Value);
 
                     var content = new StringContent(consumeResult.Message.Value, Encoding.UTF8, "application/json");
-                    var response = _httpClient.PostAsync(validateTransactionEndpoint, content).Result;
+
+                    // Use the retry policy for the HTTP request
+                    var response = _retryPolicy.ExecuteAsync(() =>
+                        _httpClient.PostAsync(validateTransactionEndpoint, content)).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -41,7 +57,7 @@ namespace Yape.AntiFraud.AdapterOutKafka
                     }
                     else
                     {
-                        Log.Error("Error processing message: {StatusCode}", response.StatusCode);
+                        Log.Error("Error processing message after retries: {StatusCode}", response.StatusCode);
                     }
                 }
             }
@@ -74,8 +90,8 @@ namespace Yape.AntiFraud.AdapterOutKafka
                 {
                     adminClient.CreateTopicsAsync(new[]
                     {
-                            new TopicSpecification { Name = topic, NumPartitions = 1, ReplicationFactor = 1 }
-                        }).Wait();
+                                new TopicSpecification { Name = topic, NumPartitions = 1, ReplicationFactor = 1 }
+                            }).Wait();
                     Log.Information("Topic '{Topic}' created.", topic);
                 }
             }
