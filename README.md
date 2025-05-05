@@ -34,9 +34,6 @@ The solution is organized into the following projects:
 3. **View Logs**:  
   - Logs will be printed directly to the console in Visual Studio's Output pane.  
 
-## Testing  
-- The solution includes unit tests and integration tests.  
-- To run the tests, open the Test Explorer in Visual Studio and execute all tests.  
 
 ## Notes  
 - Ensure Docker is running before starting the solution.  
