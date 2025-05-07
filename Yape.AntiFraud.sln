@@ -61,7 +61,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AntiFraud", "AntiFraud", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yape.Transactions.AdapterOutKafka.Tests", "Yape.Transactions\Yape.Transactions.AdapterOutKafka.Tests\Yape.Transactions.AdapterOutKafka.Tests.csproj", "{CEB30942-001D-C977-9221-6499F14362AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yape.AntiFraud.AdapterInHttp.Tests", "Yape.Transactions\Yape.AntiFraud.AdapterInHttp.Tests\Yape.AntiFraud.AdapterInHttp.Tests.csproj", "{0E7C1AF8-07E6-4FC7-BCF5-7AD2803CA70C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yape.Transactions.AdapterInHttp.Tests", "Yape.Transactions\Yape.AntiFraud.AdapterInHttp.Tests\Yape.Transactions.AdapterInHttp.Tests.csproj", "{0E7C1AF8-07E6-4FC7-BCF5-7AD2803CA70C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yape.Transactions.AdapterOutRepository.Tests", "Yape.Transactions\Yape.Transactions.AdapterOutRepository.Tests\Yape.Transactions.AdapterOutRepository.Tests.csproj", "{4F0463AD-B8FA-4F01-9E90-FFF2FA10F63D}"
 EndProject
