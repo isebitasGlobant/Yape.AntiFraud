@@ -1,6 +1,7 @@
 using Serilog;
 using Yape.AntiFraud.AdapterInHttp;
 using Yape.AntiFraud.AdapterOutKafka;
+using Yape.AntiFraud.AdapterOutKafka.Client;
 using Yape.AntiFraud.AdapterOutRepository;
 using Yape.AntiFraud.AdapterOutRepository.postgreSql;
 using Yape.AntiFraud.Domain;

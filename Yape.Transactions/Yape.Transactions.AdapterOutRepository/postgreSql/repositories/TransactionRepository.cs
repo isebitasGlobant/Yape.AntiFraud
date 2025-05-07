@@ -1,8 +1,8 @@
-﻿using Yape.AntiFraud.AdapterOutRepository.postgreSql.Mapper;
+﻿using Yape.Transactions.AdapterOutRepository.postgreSql.Mapper;
 using Yape.Transactions.Domain.Transaction.models;
 using Yape.Transactions.Domain.Transaction.portsOut;
 
-namespace Yape.AntiFraud.AdapterOutRepository.postgreSql.repositories
+namespace Yape.Transactions.AdapterOutRepository.postgreSql.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {

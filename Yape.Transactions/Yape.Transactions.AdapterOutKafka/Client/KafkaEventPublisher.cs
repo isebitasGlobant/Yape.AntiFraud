@@ -1,13 +1,13 @@
 using Polly;
 using Polly.Retry;
-using Yape.Transactions.AdapterOutKafka.Client;
+using Yape.Transactions.AdapterOutKafka.Client.Contracts;
 
 public class KafkaEventPublisher : IEventPublisher
 {
-    private readonly KafkaProducer _kafkaProducer;
+    private readonly IKafkaProducer _kafkaProducer;
     private readonly AsyncRetryPolicy _retryPolicy;
 
-    public KafkaEventPublisher(KafkaProducer kafkaProducer)
+    public KafkaEventPublisher(IKafkaProducer kafkaProducer)
     {
         _kafkaProducer = kafkaProducer;
 

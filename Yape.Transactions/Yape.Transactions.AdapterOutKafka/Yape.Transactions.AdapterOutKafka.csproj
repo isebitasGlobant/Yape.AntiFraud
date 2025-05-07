@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Yape.Transactions.Domain\Yape.Transactions.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Client\Contracts\" />
+  </ItemGroup>
+
 </Project>

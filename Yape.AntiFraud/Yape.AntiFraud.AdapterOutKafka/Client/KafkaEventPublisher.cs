@@ -1,6 +1,6 @@
 using Polly;
 using Polly.Retry;
-using Yape.AntiFraud.AdapterOutKafka;
+using Yape.AntiFraud.AdapterOutKafka.Client;
 
 public class KafkaEventPublisher : IEventPublisher
 {

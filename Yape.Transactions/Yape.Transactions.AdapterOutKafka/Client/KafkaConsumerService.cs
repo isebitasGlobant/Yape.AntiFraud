@@ -4,6 +4,7 @@ using Polly;
 using Polly.Retry;
 using Serilog;
 using System.Text;
+using System.Threading;
 
 namespace Yape.Transactions.AdapterOutKafka.Client
 {
@@ -29,7 +30,7 @@ namespace Yape.Transactions.AdapterOutKafka.Client
                     });
         }
 
-        public void StartConsuming(string topic, string updateTransactionEndpoint)
+        public void StartConsuming(string topic, string updateTransactionEndpoint, CancellationToken token = default)
         {
             CreateTopicIfNotExists(topic);
 
@@ -38,7 +39,7 @@ namespace Yape.Transactions.AdapterOutKafka.Client
 
             try
             {
-                while (true)
+                while (!token.IsCancellationRequested)
                 {
                     var consumeResult = consumer.Consume();
                     Log.Information("Message received: {Message}", consumeResult.Message.Value);

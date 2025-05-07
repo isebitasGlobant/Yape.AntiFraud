@@ -2,7 +2,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 
 
-namespace Yape.AntiFraud.AdapterOutKafka
+namespace Yape.AntiFraud.AdapterOutKafka.Client
 {
 public class KafkaProducer
     {

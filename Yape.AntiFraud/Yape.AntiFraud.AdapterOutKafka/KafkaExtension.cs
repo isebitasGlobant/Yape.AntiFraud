@@ -1,6 +1,7 @@
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Yape.AntiFraud.AdapterOutKafka.Client;
 
 namespace Yape.AntiFraud.AdapterOutKafka
 {

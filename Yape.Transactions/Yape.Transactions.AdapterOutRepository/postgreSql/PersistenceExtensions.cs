@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Yape.AntiFraud.AdapterOutRepository.postgreSql
+namespace Yape.Transactions.AdapterOutRepository.postgreSql
 {
+    [ExcludeFromCodeCoverage]
     public static class PersistenceExtensions
     {
         public static void AddPersistence(this IServiceCollection serviceCollection, IConfiguration configuration)

@@ -1,5 +1,4 @@
-﻿
-namespace Yape.AntiFraud.AdapterOutRepository.postgreSql.entities
+﻿namespace Yape.Transactions.AdapterOutRepository.postgreSql.entities
 {
     public class TransactionEntity
     {

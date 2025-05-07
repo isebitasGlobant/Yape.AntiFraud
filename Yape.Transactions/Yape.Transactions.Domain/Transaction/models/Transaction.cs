@@ -17,7 +17,4 @@
         public DateTime CreatedAt { get; set; }
         public TransactionStatus Status { get; set; }
     }
-
-    
-
 }
