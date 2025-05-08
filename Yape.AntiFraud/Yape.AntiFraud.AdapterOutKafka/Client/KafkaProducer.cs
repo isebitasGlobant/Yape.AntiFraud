@@ -12,13 +12,7 @@ public class KafkaProducer : IKafkaProducer
 
         public KafkaProducer(IConfiguration configuration, IProducer<string, string> producer)
         {
-            var kafkaConfig = new ProducerConfig
-            {
-                BootstrapServers = configuration["Kafka:BootstrapServers"]
-            };
-
-            _producer = producer ?? new ProducerBuilder<string, string>(kafkaConfig).Build();
-
+            _producer = producer;
             _topic = configuration["Kafka:Topic"] ?? throw new ArgumentNullException(nameof(configuration), "Kafka topic configuration is missing.");
         }
 

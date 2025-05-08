@@ -18,8 +18,19 @@ namespace Yape.Transactions.AdapterOutKafka
                 GroupId = configuration["Kafka:GroupId"],
                 AutoOffsetReset = AutoOffsetReset.Earliest
             });
-            services.AddScoped<IEventPublisher, KafkaEventPublisher>();
+            services.AddSingleton(new ProducerConfig
+            {
+                BootstrapServers = configuration["Kafka:BootstrapServers"]
+            });
+
+            services.AddSingleton<IProducer<string, string>>(provider =>
+            {
+                var producerConfig = provider.GetRequiredService<ProducerConfig>();
+                return new ProducerBuilder<string, string>(producerConfig).Build();
+            });
+
             services.AddSingleton<IKafkaProducer, KafkaProducer>();
+            services.AddScoped<IEventPublisher, KafkaEventPublisher>();
             services.AddSingleton<KafkaConsumerService>();
             return services;
         }
