@@ -37,4 +37,4 @@ The solution is organized into the following projects:
 
 ## Notes  
 - Ensure Docker is running before starting the solution.  
-- The API endpoints can be tested using tools like Postman or cURL.
+- The API endpoints can be tested using Swagger or tools like Postman or cURL.
