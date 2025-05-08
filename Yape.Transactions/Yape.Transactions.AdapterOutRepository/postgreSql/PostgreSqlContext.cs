@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Yape.AntiFraud.AdapterOutRepository.postgreSql.entities;
+using Yape.Transactions.AdapterOutRepository.postgreSql.entities;
 
-namespace Yape.AntiFraud.AdapterOutRepository.postgreSql
+namespace Yape.Transactions.AdapterOutRepository.postgreSql
 {
     public class PostgreSqlContext : DbContext
     {

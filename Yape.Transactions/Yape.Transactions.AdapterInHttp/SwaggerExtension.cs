@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Yape.Transactions.AdapterInHttp
 {
+    
+    [ExcludeFromCodeCoverage]
     public static class SwaggerExtension
     {
         public static IServiceCollection AddSwaggerGenCustomized(this IServiceCollection services, string appName)
@@ -26,7 +29,7 @@ namespace Yape.Transactions.AdapterInHttp
                 }
 
                 options.DescribeAllParametersInCamelCase();
-            
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
             });
@@ -48,8 +51,6 @@ namespace Yape.Transactions.AdapterInHttp
                 }
                 options.DocExpansion(DocExpansion.Full);
             });
-
-            
 
             return app;
         }

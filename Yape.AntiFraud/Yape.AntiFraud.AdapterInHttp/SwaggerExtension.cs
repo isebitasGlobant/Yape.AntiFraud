@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Yape.AntiFraud.AdapterInHttp
 {
+    [ExcludeFromCodeCoverage]
     public static class SwaggerExtension
     {
         public static IServiceCollection AddSwaggerGenCustomized(this IServiceCollection services, string appName)

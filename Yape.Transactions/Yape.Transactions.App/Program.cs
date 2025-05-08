@@ -1,9 +1,9 @@
 using Serilog;
-using Yape.AntiFraud.AdapterOutRepository;
-using Yape.AntiFraud.AdapterOutRepository.postgreSql;
 using Yape.Transactions.AdapterInHttp;
 using Yape.Transactions.AdapterOutKafka;
 using Yape.Transactions.AdapterOutKafka.Client;
+using Yape.Transactions.AdapterOutRepository;
+using Yape.Transactions.AdapterOutRepository.postgreSql;
 using Yape.Transactions.Domain;
 
 namespace Yape.Transactions.App

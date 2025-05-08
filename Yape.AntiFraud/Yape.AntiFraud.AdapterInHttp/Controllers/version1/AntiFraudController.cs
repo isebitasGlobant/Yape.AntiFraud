@@ -32,6 +32,11 @@ namespace Yape.AntiFraud.AdapterInHttp.Controllers.version1
         [HttpPost("validate")]
         public async Task<IActionResult> ValidateTransaction([FromBody] TransactionUpdateMessageRequest request)
         {
+            if (request.Id == Guid.Empty)
+            {
+                return BadRequest($"Parameter {nameof(request.Id)} canot be empty.");
+            }
+
             _ = await _antiFraudService.ValidateTransaction(request.ToDomain());
             return Ok();
         }

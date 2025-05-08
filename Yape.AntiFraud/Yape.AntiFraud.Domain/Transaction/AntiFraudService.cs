@@ -19,33 +19,34 @@ namespace Yape.AntiFraud.Domain.Transaction
 
         public async Task<models.Transaction> ValidateTransaction(models.Transaction transaction)
         {
-            var existingTransaction = await _transactionRepository.GetByIdAsync(transaction.Id);
-            if (existingTransaction.Value > 2000 && existingTransaction.Status == TransactionStatus.Pending)
+            var storedTransaction = await _transactionRepository.GetByIdAsync(transaction.Id);
+
+            if (storedTransaction.Value > 2000 && storedTransaction.Status == TransactionStatus.Pending)
             {
-                existingTransaction.Status = TransactionStatus.Rejected;
-                await _eventPublisher.PublishAsync(Topic, existingTransaction);
+                storedTransaction.Status = TransactionStatus.Rejected;
+                await _eventPublisher.PublishAsync(Topic, storedTransaction);
             }
-            else if (existingTransaction.Value < 2000 && existingTransaction.Status == TransactionStatus.Pending)
+            else if (storedTransaction.Value < 2000 && storedTransaction.Status == TransactionStatus.Pending)
             {
-                var total = await _transactionRepository.GetTotalAmountForTodaysBySourceAccountIdAsync(existingTransaction.SourceAccountId);
+                var total = await _transactionRepository.GetTotalAmountForTodaysBySourceAccountIdAsync(storedTransaction.SourceAccountId);
                 if (total.Where(t => t.Status == TransactionStatus.Approved).Sum(t => t.Value) > 20000)
                 {
-                    existingTransaction.Status = TransactionStatus.Rejected;
-                    await _eventPublisher.PublishAsync(Topic, existingTransaction);
+                    storedTransaction.Status = TransactionStatus.Rejected;
+                    await _eventPublisher.PublishAsync(Topic, storedTransaction);
                 }
                 else
                 {
-                    existingTransaction.Status = TransactionStatus.Approved;
-                    await _eventPublisher.PublishAsync(Topic, existingTransaction);
+                    storedTransaction.Status = TransactionStatus.Approved;
+                    await _eventPublisher.PublishAsync(Topic, storedTransaction);
                 }
 
             }
             else
             {
-                existingTransaction.Status = TransactionStatus.Approved;
-                await _eventPublisher.PublishAsync(Topic, existingTransaction);
+                storedTransaction.Status = TransactionStatus.Approved;
+                await _eventPublisher.PublishAsync(Topic, storedTransaction);
             }
-            return existingTransaction;
+            return storedTransaction;
         }
     }
 

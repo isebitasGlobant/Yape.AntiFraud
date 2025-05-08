@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 
-namespace Yape.AntiFraud.AdapterOutKafka
+namespace Yape.AntiFraud.AdapterOutKafka.Client
 {
     public class KafkaConsumerService
     {
@@ -31,7 +31,7 @@ namespace Yape.AntiFraud.AdapterOutKafka
                     });
         }
 
-        public void StartConsuming(string topic, string validateTransactionEndpoint)
+        public void StartConsuming(string topic, string validateTransactionEndpoint, CancellationToken token = default)
         {
             CreateTopicIfNotExists(topic);
 
@@ -40,7 +40,7 @@ namespace Yape.AntiFraud.AdapterOutKafka
 
             try
             {
-                while (true)
+                while (!token.IsCancellationRequested)
                 {
                     var consumeResult = consumer.Consume();
                     Log.Information("Message received: {Message}", consumeResult.Message.Value);

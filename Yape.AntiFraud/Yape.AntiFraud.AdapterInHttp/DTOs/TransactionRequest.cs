@@ -1,17 +1,13 @@
-﻿namespace Yape.AntiFraud.AdapterInHttp.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Yape.AntiFraud.AdapterInHttp.DTOs
 {
-    public class TransactionRequest
-    {
-        public Guid SourceAccountId { get; set; }
-        public Guid TargetAccountId { get; set; }
-        public int TransferTypeId { get; set; }
-        public decimal Value { get; set; }
-    }
-
-
     public class TransactionUpdateMessageRequest
     {
         public Guid Id { get; set; }
+        
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(10)]
         public string Status { get; set; }
     }
 }
