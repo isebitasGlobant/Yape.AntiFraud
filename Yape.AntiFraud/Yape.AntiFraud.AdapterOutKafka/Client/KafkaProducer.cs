@@ -1,26 +1,24 @@
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
+using Yape.AntiFraud.AdapterOutKafka.Client.Contracts;
 
 
 namespace Yape.AntiFraud.AdapterOutKafka.Client
 {
-public class KafkaProducer
+public class KafkaProducer : IKafkaProducer
     {
         private readonly IProducer<string, string> _producer;
         private readonly string _topic;
 
-        public KafkaProducer(IConfiguration configuration)
+        public KafkaProducer(IConfiguration configuration, IProducer<string, string> producer)
         {
-            // Configuración del servidor Kafka desde appsettings.json
             var kafkaConfig = new ProducerConfig
             {
                 BootstrapServers = configuration["Kafka:BootstrapServers"]
             };
 
-            // Inicializa el productor Kafka
-            _producer = new ProducerBuilder<string, string>(kafkaConfig).Build();
+            _producer = producer ?? new ProducerBuilder<string, string>(kafkaConfig).Build();
 
-            // Obtiene el nombre del topic desde la configuración
             _topic = configuration["Kafka:Topic"] ?? throw new ArgumentNullException(nameof(configuration), "Kafka topic configuration is missing.");
         }
 
@@ -28,14 +26,12 @@ public class KafkaProducer
         {
             try
             {
-                // Serializa el mensaje a JSON
                 var options = new System.Text.Json.JsonSerializerOptions
                 {
                     Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
                 };
                 var messageValue = System.Text.Json.JsonSerializer.Serialize(message, options);
 
-                // Envía el mensaje al servidor Kafka
                 var result = await _producer.ProduceAsync(_topic, new Message<string, string>
                 {
                     Key = key,

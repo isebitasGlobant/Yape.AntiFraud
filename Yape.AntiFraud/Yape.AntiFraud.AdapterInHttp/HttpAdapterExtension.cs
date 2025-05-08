@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Yape.AntiFraud.AdapterInHttp
 {
+    [ExcludeFromCodeCoverage]
     public static class HttpAdapterExtension
     {
         public static void ConfigureVersioning(this IServiceCollection serviceCollection)

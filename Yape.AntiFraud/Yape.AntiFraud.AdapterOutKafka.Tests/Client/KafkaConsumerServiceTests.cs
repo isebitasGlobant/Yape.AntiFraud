@@ -2,9 +2,9 @@ using Confluent.Kafka;
 using Moq;
 using Serilog;
 using System.Net;
-using Yape.Transactions.AdapterOutKafka.Client;
+using Yape.AntiFraud.AdapterOutKafka.Client;
 
-namespace Yape.Transactions.AdapterOutKafka.Tests.Client
+namespace Yape.AntiFraud.AdapterOutKafka.Tests.Client
 {
     public class KafkaConsumerServiceTests
     {
@@ -51,7 +51,6 @@ namespace Yape.Transactions.AdapterOutKafka.Tests.Client
             // Assert
             Assert.NotNull(_testHttpMessageHandler); // Ensure the handler was used
         }
-
     }
 
     // Replace the Mock<HttpMessageHandler> with a derived class of HttpMessageHandler that exposes the protected SendAsync method.
